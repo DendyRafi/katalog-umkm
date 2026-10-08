@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createSessionClient } from "@/lib/supabase/session";
+import { createClient } from "@/lib/supabase/server";
 
 export async function login(formData) {
   const email = formData.get("email")?.toString().trim();
@@ -104,4 +105,118 @@ export async function gantiPassword(formData) {
   redirect(`/admin/password?berhasil=${encodeURIComponent("Password berhasil diganti.")}`);
 }
 
+// US-08: Tambah produk
+export async function tambahProduk(formData) {
+  await requireAdmin();
 
+  const nama = formData.get("nama")?.toString().trim() || "";
+  const harga = parseInt(formData.get("harga")?.toString() || "0", 10);
+  const kategori = formData.get("kategori")?.toString().trim() || "";
+  const foto_url = formData.get("foto_url")?.toString().trim() || "";
+  const deskripsi = formData.get("deskripsi")?.toString().trim() || "";
+
+  if (!nama) {
+    redirect(`/admin/produk/baru?error=${encodeURIComponent("Nama produk wajib diisi.")}`);
+  }
+
+  if (!harga || harga < 0) {
+    redirect(`/admin/produk/baru?error=${encodeURIComponent("Harga produk wajib diisi dan tidak boleh negatif.")}`);
+  }
+
+  let errorMessage = null;
+
+  try {
+    const supabase = createClient();
+    const { error } = await supabase.from("produk").insert({
+      nama,
+      harga,
+      kategori,
+      foto_url,
+      deskripsi,
+    });
+
+    if (error) {
+      errorMessage = error.message;
+    }
+  } catch (err) {
+    errorMessage = err.message || "Terjadi kesalahan saat menyimpan produk.";
+  }
+
+  if (errorMessage) {
+    redirect(`/admin/produk/baru?error=${encodeURIComponent(errorMessage)}`);
+  }
+
+  redirect("/admin");
+}
+
+// US-09: Ubah produk
+export async function ubahProduk(formData) {
+  await requireAdmin();
+
+  const id = formData.get("id")?.toString();
+  const nama = formData.get("nama")?.toString().trim() || "";
+  const harga = parseInt(formData.get("harga")?.toString() || "0", 10);
+  const kategori = formData.get("kategori")?.toString().trim() || "";
+  const foto_url = formData.get("foto_url")?.toString().trim() || "";
+  const deskripsi = formData.get("deskripsi")?.toString().trim() || "";
+
+  if (!id) {
+    redirect("/admin");
+  }
+
+  if (!nama) {
+    redirect(`/admin/produk/${id}/ubah?error=${encodeURIComponent("Nama produk wajib diisi.")}`);
+  }
+
+  let errorMessage = null;
+
+  try {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("produk")
+      .update({ nama, harga, kategori, foto_url, deskripsi })
+      .eq("id", id);
+
+    if (error) {
+      errorMessage = error.message;
+    }
+  } catch (err) {
+    errorMessage = err.message || "Terjadi kesalahan saat menyimpan perubahan.";
+  }
+
+  if (errorMessage) {
+    redirect(`/admin/produk/${id}/ubah?error=${encodeURIComponent(errorMessage)}`);
+  }
+
+  redirect("/admin");
+}
+
+// US-10: Hapus produk
+export async function hapusProduk(formData) {
+  await requireAdmin();
+
+  const id = formData.get("id")?.toString();
+
+  if (!id) {
+    redirect("/admin");
+  }
+
+  let errorMessage = null;
+
+  try {
+    const supabase = createClient();
+    const { error } = await supabase.from("produk").delete().eq("id", id);
+
+    if (error) {
+      errorMessage = error.message;
+    }
+  } catch (err) {
+    errorMessage = err.message || "Terjadi kesalahan saat menghapus produk.";
+  }
+
+  if (errorMessage) {
+    redirect(`/admin?error=${encodeURIComponent(errorMessage)}`);
+  }
+
+  redirect("/admin");
+}

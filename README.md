@@ -76,7 +76,11 @@ Urutan yang disarankan: US-01, US-02, US-03, US-04, US-05, US-06, lalu fitur bon
 
 ## Tentang aplikasi ini
 
-- **Nama usaha:**
-- **Pembuat:**
-- **Link aplikasi:**
+- **Nama usaha:** Warung Makan Indomie
+- **Pembuat:** Dendy Rafi Al Ghiffary
+- **Link aplikasi:** https://denffy-store.vercel.app/
 - **Fitur bonus yang dikerjakan:**
+  - **US-07** – List produk di halaman admin diambil langsung dari database Supabase.
+  - **US-08** – Tambah produk baru dari halaman `/admin/produk/baru`, terlindungi login.
+  - **US-09** – Ubah data produk dari halaman `/admin/produk/[id]/ubah`, terlindungi login.
+  - **US-10** – Hapus produk dengan konfirmasi dialog, terlindungi login.

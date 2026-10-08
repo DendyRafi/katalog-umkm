@@ -1,11 +1,14 @@
 import Input from "@/components/Input";
 import Tombol from "@/components/Tombol";
 
-// Dipakai untuk tambah produk (US-08) dan ubah produk (US-09). Keduanya bonus di jalur offline.
+// Dipakai untuk tambah produk (US-08) dan ubah produk (US-09).
 // Nama field sama dengan kolom tabel "produk".
-export default function FormProduk({ produk = {}, labelTombol }) {
+// Prop `action` adalah Server Action yang dipanggil saat form disubmit.
+export default function FormProduk({ produk = {}, action, labelTombol }) {
   return (
-    <form className="flex max-w-xl flex-col gap-4">
+    <form action={action} className="flex max-w-xl flex-col gap-4">
+      {/* Hidden field untuk id saat ubah produk */}
+      {produk.id && <input type="hidden" name="id" value={produk.id} />}
       <Input label="Nama produk" name="nama" defaultValue={produk.nama} required />
       <Input
         label="Harga (Rp)"

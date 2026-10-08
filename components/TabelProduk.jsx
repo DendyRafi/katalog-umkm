@@ -1,5 +1,26 @@
+"use client";
+
 import { formatRupiah } from "@/lib/format";
 import Tombol from "@/components/Tombol";
+import { hapusProduk } from "@/app/admin/actions";
+
+function TombolHapus({ id }) {
+  async function handleHapus(formData) {
+    if (!confirm("Yakin ingin menghapus produk ini? Tindakan ini tidak bisa dibatalkan.")) {
+      return;
+    }
+    await hapusProduk(formData);
+  }
+
+  return (
+    <form action={handleHapus}>
+      <input type="hidden" name="id" value={id} />
+      <Tombol type="submit" varian="bahaya">
+        Hapus
+      </Tombol>
+    </form>
+  );
+}
 
 export default function TabelProduk({ daftarProduk }) {
   return (
@@ -28,13 +49,10 @@ export default function TabelProduk({ daftarProduk }) {
               <td className="px-4 py-3">{formatRupiah(produk.harga)}</td>
               <td className="px-4 py-3">
                 <div className="flex justify-end gap-2">
-                  {/* US-09 dan US-10 (bonus): ubah dan hapus produk */}
                   <Tombol href={`/admin/produk/${produk.id}/ubah`} varian="garis">
                     Ubah
                   </Tombol>
-                  <Tombol type="button" varian="bahaya">
-                    Hapus
-                  </Tombol>
+                  <TombolHapus id={produk.id} />
                 </div>
               </td>
             </tr>
