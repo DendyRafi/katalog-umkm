@@ -51,7 +51,23 @@ export async function keluar() {
 
 export const logout = keluar;
 
+export async function requireAdmin() {
+  const supabase = await createSessionClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    redirect(`/admin/login?error=${encodeURIComponent("Silakan login terlebih dahulu.")}`);
+  }
+
+  return { supabase, user };
+}
+
 export async function gantiPassword(formData) {
+  const { supabase } = await requireAdmin();
+
   const passwordBaru = formData.get("password_baru")?.toString() || "";
   const konfirmasiPassword = formData.get("konfirmasi_password")?.toString() || "";
 
@@ -68,32 +84,17 @@ export async function gantiPassword(formData) {
   }
 
   let errorMessage = null;
-  let unauthorized = false;
 
   try {
-    const supabase = await createSessionClient();
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
+    const { error } = await supabase.auth.updateUser({
+      password: passwordBaru,
+    });
 
-    if (userError || !user) {
-      unauthorized = true;
-    } else {
-      const { error } = await supabase.auth.updateUser({
-        password: passwordBaru,
-      });
-
-      if (error) {
-        errorMessage = error.message;
-      }
+    if (error) {
+      errorMessage = error.message;
     }
   } catch (err) {
     errorMessage = err.message || "Terjadi kesalahan saat mengganti password.";
-  }
-
-  if (unauthorized) {
-    redirect(`/admin/login?error=${encodeURIComponent("Sesi telah berakhir. Silakan login kembali.")}`);
   }
 
   if (errorMessage) {
@@ -102,4 +103,5 @@ export async function gantiPassword(formData) {
 
   redirect(`/admin/password?berhasil=${encodeURIComponent("Password berhasil diganti.")}`);
 }
+
 
