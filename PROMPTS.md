@@ -116,3 +116,15 @@ isi produknya kan masih contoh, coba sekarang anda ubah keseluruhannya menjadi j
 
 **Perbaikan:**
 Tidak ada perbaikan yang diperlukan, kode langsung berhasil dan lolos build.
+
+### [SENDIRI] Sinkronisasi Produk Warung Indomie ke Database Supabase
+
+**Prompt:**
+perubahan yang data produk tadi belum berubah
+
+**Hasil:**
+- Mengidentifikasi bahwa halaman katalog (`/`) dan detail (`/produk/[id]`) sudah terhubung langsung ke database Supabase (hasil pengerjaan US-01 dan US-02), sehingga perubahan pada file `lib/data-contoh.js` tidak otomatis mengubah data yang tampil di website.
+- Berhasil menyinkronkan dan memasukkan seluruh 7 menu baru Warung Makan Indomie ke tabel `produk` di Supabase.
+
+**Perbaikan:**
+Menghubungkan ke Supabase via server key dan memperbarui tabel `produk` dengan data menu baru, sehingga katalog di browser langsung menampilkan seluruh produk Indomie beserta gambarnya.
