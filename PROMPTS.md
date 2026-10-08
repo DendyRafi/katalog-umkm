@@ -102,3 +102,17 @@ Tidak ada perbaikan yang diperlukan, kode langsung berhasil dan lolos build.
 ## Debugging dan fitur bonus
 
 Tambahkan bagian baru untuk setiap error yang kamu perbaiki atau fitur bonus yang kamu kerjakan.
+
+### [SENDIRI] Penyesuaian Data Contoh Produk Warung Indomie
+
+**Prompt:**
+sekarang anda baca file lib/data-contoh.js
+
+isi produknya kan masih contoh, coba sekarang anda ubah keseluruhannya menjadi jika jual produk di warung indomie sesuai dengan tokonya yaitu warung indomie, coba anda ubah misal indomie goreng yang rasa lain, tolong ubah nama, harga, dekripsi, foto url, dan kategori, sesuai dengan produk indomie untuk warung indomie, dan kalau bisa anda tolong tambahkan juga gambarnya, karena gambarnya masih contoh, dan langsung masukkan lnknya di foto_url kalau bisa
+
+**Hasil:**
+- Mengubah seluruh produk di `lib/data-contoh.js` menjadi menu khas Warung Makan Indomie (Indomie Goreng Telur, Internet Telur Kornet, Indomie Goreng Aceh, Indomie Soto, Indomie Kari Ayam, Es Teh Manis, dan Es Jeruk).
+- Melengkapi data dengan nama, kategori, harga wajar, deskripsi menarik, dan link gambar langsung berkualitas tinggi dari Unsplash CDN yang siap di-load tanpa pembatasan rate limit.
+
+**Perbaikan:**
+Tidak ada perbaikan yang diperlukan, kode langsung berhasil dan lolos build.
